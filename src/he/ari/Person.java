@@ -1,7 +1,5 @@
 package he.ari;
 
-import java.util.List;
-
 public class Person {
     STATE state;
     int age;
@@ -13,12 +11,13 @@ public class Person {
         infectionTime = null;
     }
 
-    public boolean infect(Time time) {
+    public boolean infect(Time time, Snapshot snapshot) {
         if (state != STATE.HEALTHY) {
             return false;
         }
         state = STATE.TRANSMITTED;
         infectionTime = time.getTime();
+        snapshot.incrementInfected();
         return true;
     }
 

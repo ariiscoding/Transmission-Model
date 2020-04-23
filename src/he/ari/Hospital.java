@@ -24,7 +24,7 @@ public class Hospital extends Cluster {
         return false;
     }
 
-    public boolean release (int index) {
+    private boolean release (int index) {
         if (index < 0 || index >= people.size()) return false;
 
         people.remove(index);
@@ -40,15 +40,17 @@ public class Hospital extends Cluster {
         return true;
     }
 
-    public boolean cureFromHospital (int index, Heaven heaven) {
+    public boolean cureFromHospital (int index, Heaven heaven, Snapshot snap) {
         if (!release(index)) return false;
         heaven.inc();
+        snap.decrementInfected();
         return true;
     }
 
-    public boolean killInHospital (int index, Graveyard graveyard) {
+    public boolean killInHospital (int index, Graveyard graveyard, Snapshot snap) {
         if (!release(index)) return false;
         graveyard.inc();
+        snap.decrementInfected();
         return true;
     }
 
