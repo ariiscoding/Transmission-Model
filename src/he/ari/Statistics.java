@@ -36,6 +36,7 @@ public class Statistics {
         System.out.println("Time: " + snap.getTime());
         System.out.println("Healthy: " + snap.getHealthy());
         System.out.println("Infected: " + snap.getInfected());
+        System.out.println("Hospitalized : " + snap.getHospitalized());
         System.out.println("Cured: " + snap.getCured());
         System.out.println("Deceased: " + snap.getDeceased());
         System.out.println("---------------------------------");
@@ -47,8 +48,9 @@ public class Statistics {
         return history.get(history.size()-1);
     }
 
-    public void updateSnapshot(Snapshot snapshot, Heaven heaven, Graveyard graveyard) {
+    public void updateSnapshot(Snapshot snapshot, Heaven heaven, Graveyard graveyard, Hospital hospital) {
         snapshot.updateCured(heaven);
+        snapshot.updateHospitalized(hospital);
         snapshot.updateDeceased(graveyard);
         snapshot.updateHealthy(population);
     }

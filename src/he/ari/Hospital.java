@@ -1,7 +1,7 @@
 package he.ari;
 
 public class Hospital extends Cluster {
-    private int capacity;
+    public final int capacity;
     double deathRateDecrement;
     private int cureTime;
 
@@ -16,14 +16,6 @@ public class Hospital extends Cluster {
         return capacity;
     }
 
-    public boolean setCapacity(int newCapacity) {
-        if (newCapacity >= 0) {
-            this.capacity = newCapacity;
-            return true;
-        }
-        return false;
-    }
-
     private boolean release (int index) {
         if (index < 0 || index >= people.size()) return false;
 
@@ -31,26 +23,27 @@ public class Hospital extends Cluster {
         return true;
     }
 
-    public boolean admit (Person person) {
+    public boolean admit (Person person, Snapshot snap) {
         if (person.getState() != STATE.TRANSMITTED) return false;
 
         if (people.size() >= capacity) return false;
 
         people.add(person);
+        snap.infectedToHospital();
         return true;
     }
 
     public boolean cureFromHospital (int index, Heaven heaven, Snapshot snap) {
         if (!release(index)) return false;
         heaven.inc();
-        snap.decrementInfected();
+        snap.hospitalizedToHealthy();
         return true;
     }
 
     public boolean killInHospital (int index, Graveyard graveyard, Snapshot snap) {
         if (!release(index)) return false;
         graveyard.inc();
-        snap.decrementInfected();
+        snap.hospitalizedToDead();
         return true;
     }
 

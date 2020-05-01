@@ -39,22 +39,32 @@ public class Simulator {
             injectNomads(cur, nomads);
             extractNomads(cur, nomads);
             communitySpread(cur, snapshot);
-            deathProcessing(cur);
+            hospitalAdmission(cur, snapshot);
+            deathProcessing(cur, snapshot);
         }
 
         //post processing to place the rest of nomads
         extractNomads(city.city.get(0), nomads);
+        //TODO: no stats update here. will it leak?
 
         //check hospital
         maintainHospital(snapshot);
 
         //maintain stats
-        stats.updateSnapshot(snapshot, heaven, graveyard);
+        stats.updateSnapshot(snapshot, heaven, graveyard, hospital);
 
         if(reportIterationStats) stats.reportCurrentSnapshot();
 
         //increment time
         time.inc();
+    }
+
+    private void hospitalAdmission (Community community, Snapshot snapshot) {
+        if (hospital.size() >= hospital.capacity) return;
+
+        for (int i = 0; i < community.size(); i++) {
+            if (hospital.admit(community.get(i), snapshot)) community.people.remove(i);
+        }
     }
 
     private void initialInfection (int initialInfected, Snapshot snapshot) {
@@ -103,10 +113,11 @@ public class Simulator {
         }
     }
 
-    private void deathProcessing (Community community) {
+    private void deathProcessing (Community community, Snapshot snapshot) {
         for (int i = 0; i < community.size(); i++) {
             if (contagion.willKill(community.get(i))) {
                 community.kill(i, graveyard);
+                snapshot.infectedToDead();
             }
         }
     }
@@ -131,7 +142,7 @@ public class Simulator {
         this.stats = stats;
         Snapshot snapshot = stats.generate(time);
         initialInfection(initialInfected, snapshot);
-        stats.updateSnapshot(snapshot,heaven,graveyard);
+        stats.updateSnapshot(snapshot,heaven,graveyard, hospital);
         this.intercommunityMobility = intercommunityMobility;
         this.reportIterationStats = reportIterationStats;
     }

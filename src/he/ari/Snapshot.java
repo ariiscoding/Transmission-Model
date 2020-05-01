@@ -5,6 +5,7 @@ public class Snapshot {
     int time;
     int healthy;
     int infected;
+    int hospitalized;
     int deceased;
     int cured;
 
@@ -14,18 +15,40 @@ public class Snapshot {
         infected = lastSnap == null ? 0 : lastSnap.infected;
         deceased = 0;
         cured = 0;
+        hospitalized = lastSnap == null ? 0 : lastSnap.getHospitalized();
     }
+
+    public void infectedToDead() {
+        //outside hospital
+        infected--;
+        deceased++;
+    }
+
+    public void infectedToHospital() {
+        infected--;
+        hospitalized++;
+    }
+
+    public void hospitalizedToHealthy() {
+        hospitalized--;
+        healthy++;
+    }
+
+    public void hospitalizedToDead() {
+        hospitalized--;
+        deceased++;
+    }
+
+
+    public void updateHospitalized (Hospital hospital) {hospitalized = hospital.people.size();}
 
     public void updateHealthy(int population) {
-        healthy = population - infected - deceased - cured;
+        healthy = population - infected - hospitalized - deceased - cured;
     }
 
-    public void incrementInfected() {
+    public void healthyToInfected() {
         infected++;
-    }
-
-    public void decrementInfected() {
-        if (infected > 0) infected--;
+        healthy--;
     }
 
     public void updateDeceased (Graveyard graveyard) {
@@ -54,5 +77,9 @@ public class Snapshot {
 
     public int getCured() {
         return cured;
+    }
+
+    public int getHospitalized() {
+        return hospitalized;
     }
 }

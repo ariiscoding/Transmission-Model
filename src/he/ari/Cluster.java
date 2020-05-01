@@ -24,16 +24,8 @@ public abstract class Cluster {
         return people.get(index);
     }
 
-    public boolean kill (Person person, Graveyard graveyard) {
-        if (person.getState() != STATE.TRANSMITTED) {
-            return false;
-        }
-        graveyard.inc();
-        people.remove(person);
-        return true;
-    }
-
     public boolean kill (int index, Graveyard graveyard) {
+        //stats update has to be handled by the user
         if(get(index).getState() != STATE.TRANSMITTED) return false;
 
         graveyard.inc();

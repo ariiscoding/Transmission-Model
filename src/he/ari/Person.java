@@ -17,7 +17,7 @@ public class Person {
         }
         state = STATE.TRANSMITTED;
         infectionTime = time.getTime();
-        snapshot.incrementInfected();
+        snapshot.healthyToInfected();
         return true;
     }
 
