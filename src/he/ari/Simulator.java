@@ -67,13 +67,25 @@ public class Simulator {
         }
     }
 
+//    private void initialInfection (int initialInfected, Snapshot snapshot) {
+//        while(initialInfected > 0) {
+//            for (Community cur :city.city) {
+//                for (Person p : cur.people) {
+//                    if (contagion.willInfect(p)) {
+//                        p.infect(time, snapshot);
+//                        initialInfected--;
+//                    }
+//                }
+//            }
+//        }
+//    }
+
     private void initialInfection (int initialInfected, Snapshot snapshot) {
-        while(initialInfected > 0) {
+        while(snapshot.getInfected() < initialInfected) {
             for (Community cur :city.city) {
                 for (Person p : cur.people) {
                     if (contagion.willInfect(p)) {
                         p.infect(time, snapshot);
-                        initialInfected--;
                     }
                 }
             }

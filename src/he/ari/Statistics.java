@@ -49,10 +49,10 @@ public class Statistics {
     }
 
     public void updateSnapshot(Snapshot snapshot, Heaven heaven, Graveyard graveyard, Hospital hospital) {
+        snapshot.updateHealthy(population);
         snapshot.updateCured(heaven);
         snapshot.updateHospitalized(hospital);
         snapshot.updateDeceased(graveyard);
-        snapshot.updateHealthy(population);
     }
 
     public static int getPopulation (City city) {
