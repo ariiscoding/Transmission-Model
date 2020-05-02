@@ -48,10 +48,10 @@ public class Statistics {
         return history.get(history.size()-1);
     }
 
-    public void updateSnapshot(Snapshot snapshot, Heaven heaven, Graveyard graveyard, Hospital hospital) {
-        snapshot.updateHealthy(population);
-        snapshot.updateCured(heaven);
+    public void updateSnapshot(Snapshot snapshot, Heaven heaven, Graveyard graveyard, Hospital hospital, City city) {
+        snapshot.enumerate(city);
         snapshot.updateHospitalized(hospital);
+        snapshot.updateCured(heaven);
         snapshot.updateDeceased(graveyard);
     }
 
@@ -63,8 +63,8 @@ public class Statistics {
         return population;
     }
 
-    public Snapshot generate(Time time) {
-        Snapshot snapshot = new Snapshot(time, getLastSnapshot());
+    public Snapshot generate(Time time, Heaven heaven, Graveyard graveyard, Hospital hospital, City city) {
+        Snapshot snapshot = new Snapshot(time, city, hospital, graveyard, heaven);
         if (!completeHistory) {
             while(!history.isEmpty()) history.remove(history.size()-1);
         }
@@ -79,6 +79,11 @@ public class Statistics {
 
     public int currentInfected() {
         Snapshot cur = getLastSnapshot();
-        return cur == null ? -1 : cur.getInfected();
+        return cur == null ? 0 : cur.getInfected();
+    }
+
+    public int currentHospitalized() {
+        Snapshot cur = getLastSnapshot();
+        return cur == null ? 0 : cur.getHospitalized();
     }
 }

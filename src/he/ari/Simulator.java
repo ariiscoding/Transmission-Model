@@ -14,6 +14,7 @@ public class Simulator {
     Heaven heaven;
     double intercommunityMobility;
     boolean reportIterationStats;
+    int minIteration;
 
     public void simulate() {
         stats.initialReport();
@@ -24,7 +25,10 @@ public class Simulator {
 
     public boolean canEnd() {
         //can end when no infected person (including people in hospital)
-        return stats.currentInfected() == 0 ? true : false;
+        if (stats.currentInfected() + stats.currentHospitalized() == 0 && time.getTime() > minIteration) {
+            return true;
+        }
+        return false;
     }
 
     public void iterate() {
@@ -32,26 +36,25 @@ public class Simulator {
 
         List<Person> nomads = new ArrayList<>();
 
-        Snapshot snapshot = stats.generate(time);
+        //Snapshot snapshot = stats.generate(time);
 
 
         for (Community cur : city.city) {
             injectNomads(cur, nomads);
             extractNomads(cur, nomads);
-            communitySpread(cur, snapshot);
-            hospitalAdmission(cur, snapshot);
-            deathProcessing(cur, snapshot);
+            communitySpread(cur);
+            hospitalAdmission(cur);
+            deathProcessing(cur);
         }
 
         //post processing to place the rest of nomads
-        extractNomads(city.city.get(0), nomads);
-        //TODO: no stats update here. will it leak?
+        injectNomads(city.city.get(0), nomads);
 
         //check hospital
-        maintainHospital(snapshot);
+        maintainHospital();
 
         //maintain stats
-        stats.updateSnapshot(snapshot, heaven, graveyard, hospital);
+        stats.generate(time, heaven, graveyard, hospital, city);
 
         if(reportIterationStats) stats.reportCurrentSnapshot();
 
@@ -59,11 +62,11 @@ public class Simulator {
         time.inc();
     }
 
-    private void hospitalAdmission (Community community, Snapshot snapshot) {
+    private void hospitalAdmission (Community community) {
         if (hospital.size() >= hospital.capacity) return;
 
         for (int i = 0; i < community.size(); i++) {
-            if (hospital.admit(community.get(i), snapshot)) community.people.remove(i);
+            if (hospital.admit(community.get(i))) community.people.remove(i);
         }
     }
 
@@ -80,12 +83,13 @@ public class Simulator {
 //        }
 //    }
 
-    private void initialInfection (int initialInfected, Snapshot snapshot) {
-        while(snapshot.getInfected() < initialInfected) {
+    private void initialInfection (int initialInfected) {
+        while(initialInfected > 0) {
             for (Community cur :city.city) {
                 for (Person p : cur.people) {
                     if (contagion.willInfect(p)) {
-                        p.infect(time, snapshot);
+                        p.infect(time);
+                        initialInfected--;
                     }
                 }
             }
@@ -93,6 +97,7 @@ public class Simulator {
     }
 
     private void injectNomads (Community community, List<Person> nomads) {
+        //put nomads back into the community
         while (!nomads.isEmpty()) {
             Person p = nomads.get(nomads.size()-1);
             nomads.remove(nomads.size()-1);
@@ -101,6 +106,7 @@ public class Simulator {
     }
 
     private void extractNomads (Community community, List<Person> nomads) {
+        //take nomads out from the community
         int size = community.people.size();
         int count = 0;
         while (size > 0) {
@@ -114,49 +120,50 @@ public class Simulator {
         }
     }
 
-    private void communitySpread (Community community, Snapshot snapshot) {
+    private void communitySpread (Community community) {
         for (int i = 0; i < community.size(); i++) {
             for (int j = i+1; j < community.size(); j++) {
                 if (contagion.willInfect(community.get(i), community.get(j))) {
-                    community.get(i).infect(time, snapshot);
-                    community.get(j).infect(time, snapshot);
+                    community.get(i).infect(time);
+                    community.get(j).infect(time);
                 }
             }
         }
     }
 
-    private void deathProcessing (Community community, Snapshot snapshot) {
+    private void deathProcessing (Community community) {
         for (int i = 0; i < community.size(); i++) {
             if (contagion.willKill(community.get(i))) {
                 community.kill(i, graveyard);
-                snapshot.infectedToDead();
             }
         }
     }
 
-    private void maintainHospital(Snapshot snapshot) {
+    private void maintainHospital() {
         for (int i = 0; i < hospital.size(); i++) {
-            if (hospital.canRelease(i, time)) hospital.cureFromHospital(i,heaven, snapshot);
+            if (hospital.canRelease(i, time)) hospital.cureFromHospital(i,heaven);
         }
 
         for(int i = 0; i < hospital.size(); i++) {
-            if (hospital.willKillInHospital(i, contagion)) hospital.killInHospital(i, graveyard, snapshot);
+            if (hospital.willKillInHospital(i, contagion)) hospital.killInHospital(i, graveyard);
         }
     }
 
 
-    public Simulator(City city, Hospital hospital, Graveyard graveyard, Contagious contagion, Time time, Statistics stats, int initialInfected, Heaven heaven, double intercommunityMobility, boolean reportIterationStats) {
+    public Simulator(City city, Hospital hospital, Graveyard graveyard, Contagious contagion, Time time, Statistics stats, int initialInfected, Heaven heaven, double intercommunityMobility, boolean reportIterationStats, int minIteration) {
         this.city = city;
         this.hospital = hospital;
         this.graveyard = graveyard;
         this.contagion = contagion;
         this.time = time;
         this.stats = stats;
-        Snapshot snapshot = stats.generate(time);
-        initialInfection(initialInfected, snapshot);
-        stats.updateSnapshot(snapshot,heaven,graveyard, hospital);
+        this.heaven = heaven;
+        //stats.updateSnapshot(snapshot,heaven,graveyard, hospital);
         this.intercommunityMobility = intercommunityMobility;
         this.reportIterationStats = reportIterationStats;
+        initialInfection(initialInfected);
+        stats.generate(time,heaven,graveyard,hospital,city);
+        this.minIteration = minIteration;
     }
 
     public static class Builder {
@@ -169,7 +176,8 @@ public class Simulator {
         private double intercommunityMobility;
         private double deathRateDecrement;
         private int cureTime;
-        boolean reportIterationStats;
+        private boolean reportIterationStats;
+        private int minIteration;
 
         public Builder() {
             //default values
@@ -183,6 +191,7 @@ public class Simulator {
             deathRateDecrement = 0.8;
             cureTime = 14;
             reportIterationStats = false;
+            minIteration = 5;
         }
 
         public Simulator build() {
@@ -209,7 +218,15 @@ public class Simulator {
             Statistics stats = new Statistics(city, completeHistory);
             Heaven heaven = new Heaven();
 
-            return new Simulator(city, hospital, graveyard, contagion, time, stats, initialInfected, heaven, intercommunityMobility, reportIterationStats);
+            return new Simulator(city, hospital, graveyard, contagion, time, stats, initialInfected, heaven, intercommunityMobility, reportIterationStats, minIteration);
+        }
+
+        public int getMinIteration() {
+            return minIteration;
+        }
+
+        public void setMinIteration(int minIteration) {
+            this.minIteration = minIteration;
         }
 
         public int getInitialInfected() {

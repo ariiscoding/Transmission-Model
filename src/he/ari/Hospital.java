@@ -23,34 +23,31 @@ public class Hospital extends Cluster {
         return true;
     }
 
-    public boolean admit (Person person, Snapshot snap) {
+    public boolean admit (Person person) {
         if (person.getState() != STATE.TRANSMITTED) return false;
 
         if (people.size() >= capacity) return false;
 
         people.add(person);
-        snap.infectedToHospital();
         return true;
     }
 
-    public boolean cureFromHospital (int index, Heaven heaven, Snapshot snap) {
+    public boolean cureFromHospital (int index, Heaven heaven) {
         if (!release(index)) return false;
         heaven.inc();
-        snap.hospitalizedToHealthy();
         return true;
     }
 
-    public boolean killInHospital (int index, Graveyard graveyard, Snapshot snap) {
+    public boolean killInHospital (int index, Graveyard graveyard) {
         if (!release(index)) return false;
         graveyard.inc();
-        snap.hospitalizedToDead();
         return true;
     }
 
     public boolean canRelease (int index, Time time) {
         if (index < 0 || index >= people.size()) return false;
 
-        return people.get(index).getInfectionTime() != null && people.get(index).getInfectionTime() - time.getTime() >= cureTime;
+        return people.get(index).getInfectionTime() != null && time.getTime() - people.get(index).getInfectionTime() >= cureTime;
     }
 
     public boolean willKillInHospital (int index, Contagious contagion) {
@@ -62,5 +59,10 @@ public class Hospital extends Cluster {
         if (index < 0 || index >= people.size()) return false;
 
         return Utils.checkChance(virus.getDeathRate()*(1-deathRateDecrement));
+    }
+
+    @Override
+    public int size() {
+        return people.size();
     }
 }

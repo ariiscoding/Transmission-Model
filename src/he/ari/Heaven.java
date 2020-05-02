@@ -12,8 +12,8 @@ public class Heaven extends Cluster {
         cured++;
     }
 
-    public int getCured() {
+    @Override
+    public int size() {
         return cured;
     }
-
 }

@@ -11,13 +11,12 @@ public class Person {
         infectionTime = null;
     }
 
-    public boolean infect(Time time, Snapshot snapshot) {
+    public boolean infect(Time time) {
         if (state != STATE.HEALTHY) {
             return false;
         }
         state = STATE.TRANSMITTED;
         infectionTime = time.getTime();
-        snapshot.healthyToInfected();
         return true;
     }
 

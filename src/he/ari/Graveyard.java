@@ -11,7 +11,8 @@ public class Graveyard extends Cluster {
         deceased++;
     }
 
-    public int getDeceased() {
+    @Override
+    public int size() {
         return deceased;
     }
 }

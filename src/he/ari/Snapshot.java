@@ -1,5 +1,7 @@
 package he.ari;
 
+import org.jetbrains.annotations.NotNull;
+
 public class Snapshot {
     //momentary collection of current status
     int time;
@@ -9,54 +11,37 @@ public class Snapshot {
     int deceased;
     int cured;
 
-    public Snapshot(Time time, Snapshot lastSnap) {
+    public Snapshot(Time time, City city, Hospital hospital, Graveyard graveyard, Heaven heaven) {
         this.time = time.getTime();
-        healthy = 0;
-        infected = lastSnap == null ? 0 : lastSnap.infected;
-        deceased = 0;
-        cured = 0;
-        hospitalized = lastSnap == null ? 0 : lastSnap.getHospitalized();
+        updateHospitalized(hospital);
+        updateDeceased(graveyard);
+        updateCured(heaven);
+        enumerate(city);
     }
 
-    public void infectedToDead() {
-        //outside hospital
-        infected--;
-        deceased++;
+    public void enumerate(City city) {
+        for (Community com : city.city) {
+            for (Person p : com.people) {
+                if (p.state == STATE.HEALTHY) healthy++;
+                else if (p.state == STATE.TRANSMITTED) infected++;
+            }
+        }
     }
 
-    public void infectedToHospital() {
-        infected--;
-        hospitalized++;
+    public void updateHospitalized(Hospital hospital) {
+        hospitalized = hospital.size();
     }
 
-    public void hospitalizedToHealthy() {
-        hospitalized--;
-        healthy++;
-    }
-
-    public void hospitalizedToDead() {
-        hospitalized--;
-        deceased++;
-    }
-
-
-    public void updateHospitalized (Hospital hospital) {hospitalized = hospital.people.size();}
-
-    public void updateHealthy(int population) {
-        healthy = population - infected - hospitalized - deceased - cured;
-    }
-
-    public void healthyToInfected() {
-        infected++;
-        healthy--;
-    }
-
-    public void updateDeceased (Graveyard graveyard) {
-        deceased = graveyard == null ? 0 : graveyard.size();
+    public void updateDeceased(@NotNull Graveyard graveyard) {
+        deceased = graveyard.size();
     }
 
     public void updateCured (Heaven heaven) {
-        cured = heaven == null ? 0 : heaven.size();
+        cured = heaven.size();
+    }
+
+    public int getTime() {
+        return time;
     }
 
     public int getHealthy() {
@@ -67,19 +52,15 @@ public class Snapshot {
         return infected;
     }
 
+    public int getHospitalized() {
+        return hospitalized;
+    }
+
     public int getDeceased() {
         return deceased;
     }
 
-    public int getTime() {
-        return time;
-    }
-
     public int getCured() {
         return cured;
-    }
-
-    public int getHospitalized() {
-        return hospitalized;
     }
 }

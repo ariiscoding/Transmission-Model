@@ -16,9 +16,7 @@ public abstract class Cluster {
         return p;
     }
 
-    public int size() {
-        return people.size();
-    }
+    public abstract int size();
 
     public Person get(int index) {
         return people.get(index);

@@ -7,4 +7,8 @@ public class Community extends Cluster {
             people.add(new Person(60));
         }
     }
+
+    public int size() {
+        return people.size();
+    }
 }

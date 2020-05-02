@@ -3,7 +3,7 @@ package he.ari;
 public class Time {
     private int time;
 
-    public Time () {
+    public Time() {
         time = 0;
     }
 
