@@ -31,16 +31,34 @@ public class Statistics {
         if (history.isEmpty()) {
             System.out.println("No current stats available.");
         }
-        Snapshot snap = history.get(history.size()-1);
+        Snapshot snap = getLastSnapshot();
         System.out.println("---------------------------------");
         System.out.println("Time: " + snap.getTime());
+        printStats(snap);
+        System.out.println("---------------------------------");
+        System.out.println("");
+    }
+
+    public void finalReport() {
+        Snapshot snap = getLastSnapshot();
+        System.out.println("********************************");
+        System.out.println("Simulation has finished!");
+        System.out.println("Total time elapsed: " + snap.getTime());
+        printStats(snap);
+        System.out.println("Percent healthy: " + (double)snap.healthy/population);
+        double percentCured = (double)snap.getCured()/population;
+        double percentDeceased= (double) snap.getDeceased()/population;
+        System.out.println("Total percent infected: " + percentCured + percentDeceased);
+        System.out.println("  Percent cured: " + percentCured);
+        System.out.println("  Percent deceased: " + percentDeceased);
+    }
+
+    private void printStats(Snapshot snap) {
         System.out.println("Healthy: " + snap.getHealthy());
         System.out.println("Infected: " + snap.getInfected());
         System.out.println("Hospitalized : " + snap.getHospitalized());
         System.out.println("Cured: " + snap.getCured());
         System.out.println("Deceased: " + snap.getDeceased());
-        System.out.println("---------------------------------");
-        System.out.println("");
     }
 
     public Snapshot getLastSnapshot() {

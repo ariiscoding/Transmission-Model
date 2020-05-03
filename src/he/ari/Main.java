@@ -12,7 +12,7 @@ public class Main {
         builder.setHospitalCapacity(5);
         builder.setContagion(new Virus(0.1, 0.0001));
         builder.setIntercommunityMobility(0.3);
-        builder.setReportIterationStats(true);
+        builder.setReportIterationStats(false);
         builder.setInitialInfected(10);
         builder.setMinIteration(10);
         Simulator simulator = builder.build();

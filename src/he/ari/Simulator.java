@@ -21,6 +21,7 @@ public class Simulator {
         while (!canEnd()) {
             iterate();
         }
+        stats.finalReport();
     }
 
     public boolean canEnd() {
