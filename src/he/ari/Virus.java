@@ -19,4 +19,6 @@ public class Virus extends Contagion {
         }
         return Utils.checkChance(deathRate);
     }
+
+
 }

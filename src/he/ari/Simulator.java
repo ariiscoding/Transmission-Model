@@ -204,6 +204,7 @@ public class Simulator {
             if (initialInfected > numberOfCommunities*peoplePerCommunities) throw new InputMismatchException("Initial infected count cannot be larger than total population.");
             if (intercommunityMobility < 0) throw new InputMismatchException("Intercommunity Mobility must be non-negative.");
             if (deathRateDecrement < 0 || deathRateDecrement > 1) throw new InputMismatchException("Death rate decrement for the hospital must be within 0 and 1.");
+            if (contagion!=null && contagion.getTransmissionRate() <= 0 && initialInfected > 0) throw  new InputMismatchException("When contagion transmission rate is 0, initial infection must also be 0.");
 //            if (contagion instanceof Virus) {
 //                Virus temp = (Virus) contagion;
 //                if (temp.getDeathRate() - deathRateDecrement < 0) {

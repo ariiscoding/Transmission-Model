@@ -6,4 +6,6 @@ public interface Contagious {
     public boolean willKill(Person person);
 
     public boolean willInfect (Person p);
+
+    public double getTransmissionRate();
 }
