@@ -15,11 +15,26 @@ public class ThreadManager {
     private Map<Integer, FinalSnapshot> database;
     private List<Thread> threadList;
 
+    /*
+    ABOUT ITERATION COUNTS:
+        20: fluctuation within +- 2%
+        50: fluctuation within +- 1%
+        80: fluctuation within +- 1%
+        100: fluctuation within +- .5%
+        200: fluctuation within +- .05%
+        500: fluctuation within +- .01%
+        1000: fluctuation within +- .001%
+     */
+
     public ThreadManager(Simulator.Builder blueprint, int iterations) {
         this.blueprint = blueprint;
         this.iterations = iterations;
         this.database = new HashMap<>();
         threadList = new ArrayList<>();
+    }
+
+    public ThreadManager(Simulator.Builder blueprint) {
+        this(blueprint, 50);
     }
 
     public void run() {
