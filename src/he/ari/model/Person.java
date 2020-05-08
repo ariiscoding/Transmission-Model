@@ -1,4 +1,4 @@
-package he.ari;
+package he.ari.model;
 
 public class Person {
     STATE state;

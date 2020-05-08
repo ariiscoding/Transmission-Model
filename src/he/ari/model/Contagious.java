@@ -1,4 +1,4 @@
-package he.ari;
+package he.ari.model;
 
 public interface Contagious {
     public boolean willInfect (Person p1, Person p2);

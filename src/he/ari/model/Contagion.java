@@ -1,4 +1,4 @@
-package he.ari;
+package he.ari.model;
 
 public abstract class Contagion implements Contagious{
     private double transmissionRate;

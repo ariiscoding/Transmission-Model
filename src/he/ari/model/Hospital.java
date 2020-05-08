@@ -1,4 +1,4 @@
-package he.ari;
+package he.ari.model;
 
 public class Hospital extends Cluster {
     public final int capacity;

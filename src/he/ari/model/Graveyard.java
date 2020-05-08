@@ -1,4 +1,4 @@
-package he.ari;
+package he.ari.model;
 
 public class Graveyard extends Cluster {
     private int deceased;

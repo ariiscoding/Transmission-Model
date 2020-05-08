@@ -1,4 +1,4 @@
-package he.ari;
+package he.ari.model;
 
 public class Heaven extends Cluster {
     //people who have been cured

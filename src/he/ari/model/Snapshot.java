@@ -1,4 +1,4 @@
-package he.ari;
+package he.ari.model;
 
 import org.jetbrains.annotations.NotNull;
 

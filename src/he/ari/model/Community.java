@@ -1,4 +1,4 @@
-package he.ari;
+package he.ari.model;
 
 public class Community extends Cluster {
     public Community(int size) {
