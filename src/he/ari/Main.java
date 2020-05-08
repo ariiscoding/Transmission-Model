@@ -1,6 +1,7 @@
 package he.ari;
 
 import he.ari.concurrency.ModelThread;
+import he.ari.concurrency.ThreadManager;
 import he.ari.model.FinalSnapshot;
 import he.ari.model.Simulator;
 import he.ari.model.Virus;
@@ -24,12 +25,8 @@ public class Main {
         builder.setMinIteration(10);
         builder.setPrintStartAndFinishStats(true);
 
-        for (int i = 0; i < 10; i++) {
-            Thread cur = new Thread(new ModelThread(builder, database, i));
-            cur.setName(Integer.toString(i));
-            cur.start();
-        }
-
+        ThreadManager threadManager = new ThreadManager(builder, 20);
+        threadManager.run();
 
     }
 }
