@@ -5,23 +5,26 @@ import java.util.InputMismatchException;
 import java.util.List;
 
 public class Simulator {
-    City city;
-    Hospital hospital;
-    Graveyard graveyard;
-    Contagious contagion;
+    private City city;
+    private Hospital hospital;
+    private Graveyard graveyard;
+    private Contagious contagion;
     private final Time time;
-    Statistics stats;
-    Heaven heaven;
-    double intercommunityMobility;
-    boolean reportIterationStats;
-    int minIteration;
+    private Statistics stats;
+    private Heaven heaven;
+    private double intercommunityMobility;
+    private boolean reportIterationStats;
+    private int minIteration;
+    private boolean printStartAndFinishStats;
 
-    public void simulate() {
-        stats.initialReport();
+    public FinalSnapshot simulate() {
+        if (printStartAndFinishStats) stats.initialReport();
         while (!canEnd()) {
             iterate();
         }
-        stats.finalReport();
+        stats.generateFinalSnapshot();
+        if (printStartAndFinishStats) stats.finalReport();
+        return stats.finalSnapshot;
     }
 
     public boolean canEnd() {
@@ -151,7 +154,7 @@ public class Simulator {
     }
 
 
-    public Simulator(City city, Hospital hospital, Graveyard graveyard, Contagious contagion, Time time, Statistics stats, int initialInfected, Heaven heaven, double intercommunityMobility, boolean reportIterationStats, int minIteration) {
+    public Simulator(City city, Hospital hospital, Graveyard graveyard, Contagious contagion, Time time, Statistics stats, int initialInfected, Heaven heaven, double intercommunityMobility, boolean reportIterationStats, int minIteration, boolean printStartAndFinishStats) {
         this.city = city;
         this.hospital = hospital;
         this.graveyard = graveyard;
@@ -165,6 +168,7 @@ public class Simulator {
         initialInfection(initialInfected);
         stats.generate(time,heaven,graveyard,hospital,city);
         this.minIteration = minIteration;
+        this.printStartAndFinishStats = printStartAndFinishStats;
     }
 
     public static class Builder {
@@ -179,6 +183,7 @@ public class Simulator {
         private int cureTime;
         private boolean reportIterationStats;
         private int minIteration;
+        private boolean printStartAndFinishStats;
 
         public Builder() {
             //default values
@@ -193,6 +198,7 @@ public class Simulator {
             cureTime = 14;
             reportIterationStats = false;
             minIteration = 5;
+            printStartAndFinishStats = true;
         }
 
         public Simulator build() {
@@ -220,7 +226,15 @@ public class Simulator {
             Statistics stats = new Statistics(city, completeHistory);
             Heaven heaven = new Heaven();
 
-            return new Simulator(city, hospital, graveyard, contagion, time, stats, initialInfected, heaven, intercommunityMobility, reportIterationStats, minIteration);
+            return new Simulator(city, hospital, graveyard, contagion, time, stats, initialInfected, heaven, intercommunityMobility, reportIterationStats, minIteration, printStartAndFinishStats);
+        }
+
+        public boolean isPrintStartAndFinishStats() {
+            return printStartAndFinishStats;
+        }
+
+        public void setPrintStartAndFinishStats(boolean printStartAndFinishStats) {
+            this.printStartAndFinishStats = printStartAndFinishStats;
         }
 
         public int getMinIteration() {

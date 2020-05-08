@@ -2,7 +2,7 @@ package he.ari;
 
 import org.jetbrains.annotations.NotNull;
 
-public class Snapshot {
+public class Snapshot implements PrintableSnapshot {
     //momentary collection of current status
     int time;
     int healthy;

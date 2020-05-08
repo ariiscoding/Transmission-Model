@@ -11,6 +11,7 @@ public class Statistics {
     List<Snapshot> history;
     boolean completeHistory; //if set to yes, history (list) only stores the most recent Snapshot
     public final int population;
+    public FinalSnapshot finalSnapshot;
 
     public Statistics(City city, boolean completeHistory) {
         history = new ArrayList<>();
@@ -40,20 +41,18 @@ public class Statistics {
     }
 
     public void finalReport() {
-        Snapshot snap = getLastSnapshot();
+        if (finalSnapshot==null) generateFinalSnapshot();
         System.out.println("********************************");
         System.out.println("Simulation has finished!");
-        System.out.println("Total time elapsed: " + snap.getTime());
-        printStats(snap);
-        System.out.println("Percent healthy: " + (double)snap.healthy/population);
-        double percentCured = (double)snap.getCured()/population;
-        double percentDeceased= (double) snap.getDeceased()/population;
-        System.out.println("Total percent infected: " + percentCured + percentDeceased);
-        System.out.println("  Percent cured: " + percentCured);
-        System.out.println("  Percent deceased: " + percentDeceased);
+        System.out.println("Total time elapsed: " + finalSnapshot.getEndTime());
+        printStats(finalSnapshot);
+        System.out.println("Percent healthy: " + finalSnapshot.getPercentHealthy());
+        System.out.println("Total percent infected: " + finalSnapshot.getTotalPercentInfected());
+        System.out.println("  Percent cured: " + finalSnapshot.getPercentCured());
+        System.out.println("  Percent deceased: " + finalSnapshot.getPercentDeceased());
     }
 
-    private void printStats(Snapshot snap) {
+    private void printStats(PrintableSnapshot snap) {
         System.out.println("Healthy: " + snap.getHealthy());
         System.out.println("Infected: " + snap.getInfected());
         System.out.println("Hospitalized : " + snap.getHospitalized());
@@ -89,6 +88,13 @@ public class Statistics {
         history.add(snapshot);
 
         return snapshot;
+    }
+
+    public FinalSnapshot generateFinalSnapshot() {
+        Snapshot snap = getLastSnapshot();
+        FinalSnapshot finalSnapshot = new FinalSnapshot(population,snap.getTime(),snap.getHealthy(),snap.getInfected(),snap.getHospitalized(),snap.getDeceased(),snap.getCured());
+        this.finalSnapshot = finalSnapshot;
+        return finalSnapshot;
     }
 
     public Integer getPopulation() {
