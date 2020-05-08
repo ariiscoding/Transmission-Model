@@ -27,6 +27,5 @@ public class Main {
 
         ThreadManager threadManager = new ThreadManager(builder, 20);
         threadManager.run();
-
     }
 }

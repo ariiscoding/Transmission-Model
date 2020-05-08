@@ -5,6 +5,7 @@ import he.ari.model.Simulator;
 import he.ari.model.Virus;
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ModelThread implements Runnable{
     Simulator.Builder blueprint;
