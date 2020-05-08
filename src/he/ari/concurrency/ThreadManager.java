@@ -41,6 +41,12 @@ public class ThreadManager {
         System.out.println("*************************************************ALL THREADS FINISHED*************************************************");
     }
 
+    public ThreadStats summarize() {
+        ThreadStats stats = new ThreadStats(database);
+        stats.summarize();
+        return stats;
+    }
+
     public Simulator.Builder getBlueprint() {
         return blueprint;
     }

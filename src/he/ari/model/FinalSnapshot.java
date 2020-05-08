@@ -9,7 +9,7 @@ public class FinalSnapshot implements PrintableSnapshot {
     private int deceased;
     private int cured;
 
-    public FinalSnapshot(int population, int endTime, int healthy, int infected, int hospitalized, int deceased, int cured) {
+    public FinalSnapshot(int population, int endTime, int healthy, int hospitalized, int deceased, int cured) {
         this.population = population;
         this.endTime = endTime;
         this.healthy = healthy;

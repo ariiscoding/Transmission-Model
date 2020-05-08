@@ -92,7 +92,7 @@ public class Statistics {
 
     public FinalSnapshot generateFinalSnapshot() {
         Snapshot snap = getLastSnapshot();
-        FinalSnapshot finalSnapshot = new FinalSnapshot(population,snap.getTime(),snap.getHealthy(),snap.getInfected(),snap.getHospitalized(),snap.getDeceased(),snap.getCured());
+        FinalSnapshot finalSnapshot = new FinalSnapshot(population, snap.getTime(),snap.getHealthy(), snap.getHospitalized(),snap.getDeceased(),snap.getCured());
         this.finalSnapshot = finalSnapshot;
         return finalSnapshot;
     }
