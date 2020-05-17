@@ -14,6 +14,7 @@ public class MultithreadedExecutor {
     private ExecutorService executorService;
     private int threadPoolSize;
     private int timeOutSeconds;
+    private ThreadStats lastStats;
 
     public MultithreadedExecutor(Simulator.Builder blueprint, int iterations) {
         this.threadPoolSize = 8;
@@ -22,9 +23,21 @@ public class MultithreadedExecutor {
         this.iterations = iterations;
         this.results = new ArrayList<>();
         executorService = Executors.newFixedThreadPool(threadPoolSize);
+        lastStats = null;
     }
 
-    public int execute() throws InterruptedException, ExecutionException {
+    public ThreadStats executeSafely() {
+        ThreadStats output = null;
+        try {
+            output = execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            return output;
+        }
+    }
+
+    public ThreadStats execute() throws InterruptedException, ExecutionException {
         //return the number of simulations that failed (mostly due to timeout)
 
         results.clear();
@@ -42,13 +55,22 @@ public class MultithreadedExecutor {
         }
 
         System.out.println("*************************************************ALL THREADS FINISHED*************************************************");
-        return timedOutThreads;
+        generateSummaryStats(timedOutThreads);
+        return this.lastStats;
+    }
+
+    private ThreadStats generateSummaryStats(int timedOutThreads) {
+        this.lastStats = new ThreadStats(results, timedOutThreads);
+        return this.lastStats;
     }
 
     public ThreadStats summarize() {
-        ThreadStats stats = new ThreadStats(results);
-        stats.summarize();
-        return stats;
+        if (lastStats==null) {
+            System.out.println("No history of execution.");
+            return null;
+        }
+        lastStats.summarize();
+        return lastStats;
     }
 
     public int getThreadPoolSize() {

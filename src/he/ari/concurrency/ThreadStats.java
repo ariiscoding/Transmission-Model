@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class ThreadStats {
     private long simulationCount;
+    private long timedOutThreadCount;
     private long totalTime;
     private long population;
     private long healthy;
@@ -14,9 +15,10 @@ public class ThreadStats {
     private long cured;
     private long deceased;
 
-
+    @Deprecated
     public ThreadStats (Map<Integer, FinalSnapshot> database) {
         this.simulationCount = database.size();
+        this.timedOutThreadCount = 0;
         totalTime = 0;
         this.population = 0;
         this.healthy = 0;
@@ -34,8 +36,9 @@ public class ThreadStats {
         }
     }
 
-    public ThreadStats (List<FinalSnapshot> results) {
+    public ThreadStats (List<FinalSnapshot> results, int timedOutThreadCount) {
         this.simulationCount = results.size();
+        this.timedOutThreadCount = timedOutThreadCount;
         totalTime = 0;
         this.population = 0;
         this.healthy = 0;
@@ -55,7 +58,9 @@ public class ThreadStats {
 
     public void summarize() {
         System.out.println("****************************************************************");
-        System.out.println("Total number of simulations: " + simulationCount);
+        System.out.println("Total number of simulations requested: " + simulationCount);
+        System.out.println("Number of simulations timed out: " + timedOutThreadCount);
+        System.out.println("Number of simulations succeeded: " + (simulationCount-timedOutThreadCount));
         System.out.println("Total time elapsed: " + totalTime);
         System.out.println("Total population across simulation: " + population);
         System.out.println("Total healthy: " + healthy);
