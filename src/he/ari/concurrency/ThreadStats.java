@@ -2,6 +2,7 @@ package he.ari.concurrency;
 
 import he.ari.model.FinalSnapshot;
 
+import java.util.List;
 import java.util.Map;
 
 public class ThreadStats {
@@ -24,6 +25,25 @@ public class ThreadStats {
         this.deceased = 0;
 
         for (FinalSnapshot cur : database.values()) {
+            population += cur.getPopulation();
+            totalTime += cur.getEndTime();
+            healthy += cur.getHealthy();
+            totalInfected += cur.getInfected();
+            cured += cur.getCured();
+            deceased += cur.getDeceased();
+        }
+    }
+
+    public ThreadStats (List<FinalSnapshot> results) {
+        this.simulationCount = results.size();
+        totalTime = 0;
+        this.population = 0;
+        this.healthy = 0;
+        this.totalInfected = 0;
+        this.cured = 0;
+        this.deceased = 0;
+
+        for (FinalSnapshot cur : results) {
             population += cur.getPopulation();
             totalTime += cur.getEndTime();
             healthy += cur.getHealthy();
