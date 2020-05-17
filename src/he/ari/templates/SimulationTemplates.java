@@ -3,7 +3,7 @@ package he.ari.templates;
 import he.ari.model.Simulator;
 import he.ari.model.Virus;
 
-public class Templates {
+public class SimulationTemplates {
     public static Simulator.Builder defaultModel() {
         Simulator.Builder builder = new Simulator.Builder();
         builder.setNumberOfCommunities(50);

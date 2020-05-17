@@ -16,14 +16,22 @@ public class MultithreadedExecutor {
     private int timeOutSeconds;
     private ThreadStats lastStats;
 
-    public MultithreadedExecutor(Simulator.Builder blueprint, int iterations) {
+    public MultithreadedExecutor(Simulator.Builder blueprint, int iterations, int timeOutSeconds) {
         this.threadPoolSize = 8;
-        this.timeOutSeconds = 10;
+        this.timeOutSeconds = timeOutSeconds;
         this.blueprint = blueprint;
         this.iterations = iterations;
         this.results = new ArrayList<>();
         executorService = Executors.newFixedThreadPool(threadPoolSize);
         lastStats = null;
+    }
+
+    public MultithreadedExecutor (Simulator.Builder blueprint, int iterations) {
+        this(blueprint, iterations, 10);
+    }
+
+    public MultithreadedExecutor(Simulator.Builder blueprint) {
+        this(blueprint, 200);
     }
 
     public ThreadStats executeSafely() {
@@ -40,6 +48,7 @@ public class MultithreadedExecutor {
     public ThreadStats execute() throws InterruptedException, ExecutionException {
         //return the number of simulations that failed (mostly due to timeout)
 
+        System.out.println("*************************************************EXECUTION STARTS*************************************************");
         results.clear();
         int timedOutThreads = 0;
 
