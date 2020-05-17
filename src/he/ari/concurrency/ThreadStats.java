@@ -15,6 +15,26 @@ public class ThreadStats {
     private long cured;
     private long deceased;
 
+    public ThreadStats (List<FinalSnapshot> results, int timedOutThreadCount) {
+        this.simulationCount = results.size();
+        this.timedOutThreadCount = timedOutThreadCount;
+        totalTime = 0;
+        this.population = 0;
+        this.healthy = 0;
+        this.totalInfected = 0;
+        this.cured = 0;
+        this.deceased = 0;
+
+        for (FinalSnapshot cur : results) {
+            population += cur.getPopulation();
+            totalTime += cur.getEndTime();
+            healthy += cur.getHealthy();
+            totalInfected += cur.getInfected();
+            cured += cur.getCured();
+            deceased += cur.getDeceased();
+        }
+    }
+
     @Deprecated
     public ThreadStats (Map<Integer, FinalSnapshot> database) {
         this.simulationCount = database.size();
@@ -27,26 +47,6 @@ public class ThreadStats {
         this.deceased = 0;
 
         for (FinalSnapshot cur : database.values()) {
-            population += cur.getPopulation();
-            totalTime += cur.getEndTime();
-            healthy += cur.getHealthy();
-            totalInfected += cur.getInfected();
-            cured += cur.getCured();
-            deceased += cur.getDeceased();
-        }
-    }
-
-    public ThreadStats (List<FinalSnapshot> results, int timedOutThreadCount) {
-        this.simulationCount = results.size();
-        this.timedOutThreadCount = timedOutThreadCount;
-        totalTime = 0;
-        this.population = 0;
-        this.healthy = 0;
-        this.totalInfected = 0;
-        this.cured = 0;
-        this.deceased = 0;
-
-        for (FinalSnapshot cur : results) {
             population += cur.getPopulation();
             totalTime += cur.getEndTime();
             healthy += cur.getHealthy();
@@ -90,6 +90,9 @@ public class ThreadStats {
         return (double)deceased/totalInfected;
     }
 
+    public long getTimedOutThreadCount() {
+        return timedOutThreadCount;
+    }
 
     public long getTotalTime() {
         return totalTime;

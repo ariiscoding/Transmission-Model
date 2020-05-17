@@ -43,8 +43,8 @@ public class MultithreadedExecutor {
         results.clear();
         int timedOutThreads = 0;
 
-        List<ModelThread2> threads = new ArrayList<>();
-        for (int i = 0; i < iterations; i++) threads.add(new ModelThread2(blueprint));
+        List<ThreadUnit> threads = new ArrayList<>();
+        for (int i = 0; i < iterations; i++) threads.add(new ThreadUnit(blueprint));
 
         List<Future<FinalSnapshot>> futures = executorService.invokeAll(threads, timeOutSeconds, TimeUnit.SECONDS);
         executorService.shutdown();

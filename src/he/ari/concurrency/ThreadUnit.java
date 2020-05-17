@@ -6,10 +6,10 @@ import he.ari.model.Simulator;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-public class ModelThread2 implements Callable<FinalSnapshot> {
+public class ThreadUnit implements Callable<FinalSnapshot> {
     Simulator.Builder blueprint;
 
-    public ModelThread2 (Simulator.Builder blueprint) {
+    public ThreadUnit(Simulator.Builder blueprint) {
         this.blueprint = blueprint;
     }
 
