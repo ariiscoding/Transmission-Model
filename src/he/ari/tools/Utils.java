@@ -1,5 +1,7 @@
 package he.ari.tools;
 
+import he.ari.model.Simulator;
+
 import java.util.Random;
 
 public class Utils {
@@ -26,5 +28,12 @@ public class Utils {
         with 2 decimals, by default
          */
         return toPercentage(n, 2);
+    }
+
+    public static int calcHospitalCapacity (Simulator.Builder builder, double percent) {
+        int communities = builder.getNumberOfCommunities();
+        int populationPerCommunities = builder.getPeoplePerCommunities();
+
+        return (int)(communities * populationPerCommunities * percent);
     }
 }
