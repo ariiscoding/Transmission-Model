@@ -11,7 +11,7 @@ import java.util.concurrent.*;
 public class Main {
 
     public static void main(String[] args) throws InterruptedException, ExecutionException {
-        MultithreadedExecutor executor = ExecutorFactory.chinaModel();
+        MultithreadedExecutor executor = ExecutorFactory.newYorkModel();
         executor.executeSafely();
         executor.summarize();
     }
