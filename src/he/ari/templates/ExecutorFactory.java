@@ -10,4 +10,12 @@ public class ExecutorFactory {
     public static MultithreadedExecutor newYorkModel() {
         return new MultithreadedExecutor(SimulationTemplates.newYorkModel(), 300, 15);
     }
+
+    public static MultithreadedExecutor newJerseyModel() {
+        return new MultithreadedExecutor(SimulationTemplates.newJerseyModel(), 300, 15);
+    }
+
+    public static MultithreadedExecutor californiaModel() {
+        return new MultithreadedExecutor(SimulationTemplates.californiaModel(), 300, 15);
+    }
 }

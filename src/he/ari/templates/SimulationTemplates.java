@@ -9,8 +9,22 @@ public class SimulationTemplates {
         Simulator.Builder builder = new Simulator.Builder();
         builder.setNumberOfCommunities(50);
         builder.setPeoplePerCommunities(25);
-        builder.setHospitalCapacity(5);
-        builder.setContagion(new Virus(0.001, 0.0015));
+        builder.setHospitalCapacity(Utils.calcHospitalCapacity(builder, 0.08));
+        builder.setContagion(new Virus(0.0027, 0.0015));
+        builder.setIntercommunityMobility(0.3);
+        builder.setReportIterationStats(false);
+        builder.setInitialInfected(10);
+        builder.setMinIteration(10);
+        builder.setPrintStartAndFinishStats(false);
+        return builder;
+    }
+
+    public static Simulator.Builder newYorkModel() {
+        Simulator.Builder builder = new Simulator.Builder();
+        builder.setNumberOfCommunities(50);
+        builder.setPeoplePerCommunities(25);
+        builder.setHospitalCapacity(Utils.calcHospitalCapacity(builder, 0.08));
+        builder.setContagion(new Virus(0.012, 0.03));
         builder.setIntercommunityMobility(0.3);
         builder.setReportIterationStats(false);
         builder.setInitialInfected(10);
@@ -20,13 +34,28 @@ public class SimulationTemplates {
         return builder;
     }
 
-    public static Simulator.Builder newYorkModel() {
+    public static Simulator.Builder newJerseyModel() {
         Simulator.Builder builder = new Simulator.Builder();
         builder.setNumberOfCommunities(50);
         builder.setPeoplePerCommunities(25);
-        builder.setHospitalCapacity(Utils.calcHospitalCapacity(builder, 0.8));
-        builder.setContagion(new Virus(0.015, 0.03));
+        builder.setHospitalCapacity(Utils.calcHospitalCapacity(builder, 0.08));
+        builder.setContagion(new Virus(0.011, 0.023));
         builder.setIntercommunityMobility(0.3);
+        builder.setReportIterationStats(false);
+        builder.setInitialInfected(10);
+        builder.setMinIteration(10);
+        builder.setPrintStartAndFinishStats(false);
+
+        return builder;
+    }
+
+    public static Simulator.Builder californiaModel() {
+        Simulator.Builder builder = new Simulator.Builder();
+        builder.setNumberOfCommunities(75);
+        builder.setPeoplePerCommunities(55);
+        builder.setHospitalCapacity(Utils.calcHospitalCapacity(builder, 0.15));
+        builder.setContagion(new Virus(0.0005, 0.015));
+        builder.setIntercommunityMobility(0.1);
         builder.setReportIterationStats(false);
         builder.setInitialInfected(10);
         builder.setMinIteration(10);
