@@ -18,4 +18,8 @@ public class ExecutorFactory {
     public static MultithreadedExecutor californiaModel() {
         return new MultithreadedExecutor(SimulationTemplates.californiaModel(), 300, 15);
     }
+
+    public static MultithreadedExecutor chinaModel() {
+        return new MultithreadedExecutor(SimulationTemplates.chinaModel(), 300, 15);
+    }
 }

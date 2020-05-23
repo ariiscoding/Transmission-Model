@@ -63,4 +63,20 @@ public class SimulationTemplates {
 
         return builder;
     }
+
+    public static Simulator.Builder chinaModel() {
+        //this model is currently a little slow
+        Simulator.Builder builder = new Simulator.Builder();
+        builder.setNumberOfCommunities(100);
+        builder.setPeoplePerCommunities(60);
+        builder.setHospitalCapacity(Utils.calcHospitalCapacity(builder, 0.2));
+        builder.setContagion(new Virus(0.00005, 0.015));
+        builder.setIntercommunityMobility(0.002);
+        builder.setReportIterationStats(false);
+        builder.setInitialInfected(10);
+        builder.setMinIteration(10);
+        builder.setPrintStartAndFinishStats(false);
+
+        return builder;
+    }
 }
