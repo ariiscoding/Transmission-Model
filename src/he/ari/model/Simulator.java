@@ -1,5 +1,7 @@
 package he.ari.model;
 
+import he.ari.tools.Utils;
+
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;

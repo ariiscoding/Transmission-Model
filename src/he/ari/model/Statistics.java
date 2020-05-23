@@ -46,10 +46,10 @@ public class Statistics {
         System.out.println("Simulation has finished!");
         System.out.println("Total time elapsed: " + finalSnapshot.getEndTime());
         printStats(finalSnapshot);
-        System.out.println("Percent healthy: " + finalSnapshot.getPercentHealthy());
-        System.out.println("Total percent infected: " + finalSnapshot.getTotalPercentInfected());
-        System.out.println("  Percent cured: " + finalSnapshot.getPercentCured());
-        System.out.println("  Percent deceased: " + finalSnapshot.getPercentDeceased());
+        System.out.println("Percent healthy: " + finalSnapshot.showPercentHealthy());
+        System.out.println("Total percent infected: " + finalSnapshot.showTotalPercentInfected());
+        System.out.println("  Percent cured: " + finalSnapshot.showPercentCured());
+        System.out.println("  Percent deceased: " + finalSnapshot.showPercentDeceased());
     }
 
     private void printStats(PrintableSnapshot snap) {

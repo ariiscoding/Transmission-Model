@@ -1,5 +1,7 @@
 package he.ari.model;
 
+import he.ari.tools.Utils;
+
 public abstract class Contagion implements Contagious{
     private double transmissionRate;
 

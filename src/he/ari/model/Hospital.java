@@ -1,5 +1,7 @@
 package he.ari.model;
 
+import he.ari.tools.Utils;
+
 public class Hospital extends Cluster {
     public final int capacity;
     double deathRateDecrement;

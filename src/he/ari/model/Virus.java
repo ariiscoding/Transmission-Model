@@ -1,5 +1,7 @@
 package he.ari.model;
 
+import he.ari.tools.Utils;
+
 public class Virus extends Contagion {
     private double deathRate;
 

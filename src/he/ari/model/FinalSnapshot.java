@@ -1,5 +1,7 @@
 package he.ari.model;
 
+import he.ari.tools.Utils;
+
 public class FinalSnapshot implements PrintableSnapshot {
     private int population;
     private int endTime;
@@ -33,6 +35,22 @@ public class FinalSnapshot implements PrintableSnapshot {
 
     public double getPercentCured() {
         return (double)cured/totalInfected;
+    }
+
+    public String showPercentHealthy() {
+        return Utils.toPercentage(getPercentHealthy());
+    }
+
+    public String showTotalPercentInfected() {
+        return Utils.toPercentage(getTotalPercentInfected());
+    }
+
+    public String showPercentCured() {
+        return Utils.toPercentage(getPercentCured());
+    }
+
+    public String showPercentDeceased() {
+        return Utils.toPercentage(getPercentDeceased());
     }
 
     public int getPopulation() {

@@ -1,6 +1,8 @@
 package he.ari.concurrency;
 
 import he.ari.model.FinalSnapshot;
+import he.ari.tools.Utils;
+import jdk.jshell.execution.Util;
 
 import java.util.List;
 import java.util.Map;
@@ -67,10 +69,10 @@ public class ThreadStats {
         System.out.println("Total Infected " + totalInfected);
         System.out.println("  Total cured: " + cured);
         System.out.println("  Total deceased: " + deceased);
-        System.out.println("Percent healthy: " + getPercentHealthy());
-        System.out.println("Total percent infected: " + getTotalPercentInfected());
-        System.out.println("  Percent cured: " + getPercentCured());
-        System.out.println("  Percent deceased: " + getPercentDeceased());
+        System.out.println("Percent healthy: " + showPercentHealthy());
+        System.out.println("Total percent infected: " + showTotalPercentInfected());
+        System.out.println("  Percent cured: " + showPercentCured());
+        System.out.println("  Percent deceased: " + showPercentDeceased());
         System.out.println("****************************************************************");
     }
 
@@ -78,16 +80,32 @@ public class ThreadStats {
         return (double)healthy/population;
     }
 
+    public String showPercentHealthy() {
+        return Utils.toPercentage(getPercentHealthy());
+    }
+
     public double getTotalPercentInfected() {
         return (double)totalInfected/population;
+    }
+
+    public String showTotalPercentInfected() {
+        return Utils.toPercentage(getTotalPercentInfected());
     }
 
     public double getPercentCured() {
         return (double)cured/totalInfected;
     }
 
+    public String showPercentCured() {
+        return Utils.toPercentage(getPercentCured());
+    }
+
     public double getPercentDeceased() {
         return (double)deceased/totalInfected;
+    }
+
+    public String showPercentDeceased() {
+        return Utils.toPercentage(getPercentDeceased());
     }
 
     public long getTimedOutThreadCount() {
